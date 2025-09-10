@@ -15,13 +15,13 @@ ASmashCharacter::ASmashCharacter()
 void ASmashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void ASmashCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	RotateMeshUsingOrientX();
 }
 
 // Called to bind functionality to input
@@ -30,3 +30,19 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+float ASmashCharacter::GetOrientX() const
+{
+	return OrientX;
+}
+
+void ASmashCharacter::SetOrientX(float NewOrientX)
+{
+	OrientX = NewOrientX;
+}
+
+void ASmashCharacter::RotateMeshUsingOrientX() const
+{
+	FRotator Rotation = GetMesh()->GetRelativeRotation();
+	Rotation.Yaw = -90.f * OrientX;
+	GetMesh()->SetRelativeRotation(Rotation);
+}

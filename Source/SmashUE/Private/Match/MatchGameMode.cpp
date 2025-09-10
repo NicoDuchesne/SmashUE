@@ -19,20 +19,20 @@ void AMatchGameMode::BeginPlay()
 		EAutoReceiveInput::Type InputType = PlayerStartPoint->AutoReceiveInput.GetValue();
 		TSubclassOf<ASmashCharacter> SmashCharacterClass = GetSmashCharacterClassFromInputType(InputType);
 		if (SmashCharacterClass == nullptr) continue;
-		
-		GEngine-> AddOnScreenDebugMessage(
+
+		GEngine->AddOnScreenDebugMessage(
 			-1,
 			3.f,
 			FColor::Cyan,
 			SmashCharacterClass->GetFName().ToString()
-			);
+		);
 	}
 }
 
 void AMatchGameMode::FindPlayerStartActorsInArena(TArray<AArenaPlayerStart*>& ResultsActors)
 {
 	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AArenaPlayerStart::StaticClass(),FoundActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AArenaPlayerStart::StaticClass(), FoundActors);
 
 	for (int i = 0; i < FoundActors.Num(); i++)
 	{
@@ -50,21 +50,23 @@ void AMatchGameMode::SpawnCharacters(const TArray<AArenaPlayerStart*>& SpawnPoin
 		EAutoReceiveInput::Type InputType = SpawnPoint->AutoReceiveInput.GetValue();
 		TSubclassOf<ASmashCharacter> SmashCharacterClass = GetSmashCharacterClassFromInputType(InputType);
 		if (SmashCharacterClass == nullptr) continue;
-		
+
 		ASmashCharacter* NewCharacter = GetWorld()->SpawnActorDeferred<ASmashCharacter>(
 			SmashCharacterClass,
 			SpawnPoint->GetTransform()
-			);
+		);
 
 		if (NewCharacter == nullptr) continue;
 		NewCharacter->AutoPossessPlayer = SpawnPoint->AutoReceiveInput;
+		NewCharacter->SetOrientX(SpawnPoint->GetStartOrientX());
 		NewCharacter->FinishSpawning(SpawnPoint->GetTransform());
 
 		CharactersInsideArena.Add(NewCharacter);
 	}
 }
 
-TSubclassOf<ASmashCharacter> AMatchGameMode::GetSmashCharacterClassFromInputType(EAutoReceiveInput::Type InputType) const
+TSubclassOf<ASmashCharacter> AMatchGameMode::GetSmashCharacterClassFromInputType(
+	EAutoReceiveInput::Type InputType) const
 {
 	switch (InputType)
 	{
@@ -80,7 +82,7 @@ TSubclassOf<ASmashCharacter> AMatchGameMode::GetSmashCharacterClassFromInputType
 	case EAutoReceiveInput::Player3:
 		return SmashCharacterClassP3;
 
-	default :
+	default:
 		return nullptr;
 	}
 }

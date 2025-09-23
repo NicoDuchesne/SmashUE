@@ -16,6 +16,7 @@ ESmashCharacterStateID USmashCharacterState::GetStateID()
 	return ESmashCharacterStateID::None;
 }
 
+
 void USmashCharacterState::StateInit(USmashCharacterStateMachine* InStateMachine)
 {
 	StateMachine = InStateMachine;
@@ -26,4 +27,12 @@ void USmashCharacterState::StateInit(USmashCharacterStateMachine* InStateMachine
 		FColor::Magenta,
 		FString::Printf(TEXT("Init State %d"), GetStateID())
 	);
+}
+
+void USmashCharacterState::StateEnter(ESmashCharacterStateID PreviousStateID)
+{
+}
+
+void USmashCharacterState::StateExit(ESmashCharacterStateID NextStateID)
+{
 }
